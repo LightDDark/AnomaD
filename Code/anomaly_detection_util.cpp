@@ -1,10 +1,11 @@
 /*
  * animaly_detection_util.cpp
  *
- * Author: write your ID and name here
+ * Author: Or Avraham Yehezkel 314915869 & Maayan Shavit ??????
  */
 
 #include <math.h>
+#include <assert.h>
 #include "anomaly_detection_util.h"
 
 // Declares assisting functions
@@ -42,7 +43,9 @@ float var(float* x, int size){
     // calculate according to formula
     float var = avg(newX, size) - pow(u, 2);
     // delete allocated memory
-    delete[] newX;
+    if (nullptr != newX) {
+        delete[] newX;
+    }
     return var;
 }
 
@@ -87,6 +90,8 @@ float pearson(float* x, float* y, int size){
 float* copyPointer(float* x, int size) {
     // declares pointer to float at the SIZE of size
     float* newX = new float[size];
+    // checks the allocation was succesful
+    assert(nullptr != newX);
     // loops on x and copy values the new pointer
     for (int i = 0; i < size; i++) {
         newX[i] = x[i];
