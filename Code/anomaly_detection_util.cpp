@@ -1,7 +1,7 @@
 /*
  * animaly_detection_util.cpp
  *
- * Author: Or Avraham Yehezkel 314915869 & Maayan Shavit ??????
+ * Author: 314915869 Or Avraham Yehezkel & ?????? Maayan Shavit
  */
 
 #include <math.h>
