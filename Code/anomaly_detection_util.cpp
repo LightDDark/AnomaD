@@ -60,7 +60,7 @@ float cov(float* x, float* y, int size){
     float avgY = avg(y, size);
     // create a new Array for the multipcation of differance.
     float covArr[size];
-    for (size_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         // multiply the diff from avg in each array
         covArr[i] = (x[i] - avgX) * (y[i] - avgY);
     }
@@ -125,7 +125,7 @@ Line linear_reg(Point** points, int size) {
         points, extracting the X and Y values
         and inserting them into new, separated arrays
     */
-    for (size_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->x;
         yArr[i] = points[i]->y;
     }
