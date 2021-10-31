@@ -149,7 +149,7 @@ Line linear_reg(Point** points, int size) {
 */
 float dev(Point p,Point** points, int size){
     Line lineReg = linear_reg(points,size);
-    float deviationP = abs (p.y - lineReg.f(p.x));
+    float deviationP = fabs (p.y - lineReg.f(p.x));
     return deviationP;
 }
 
@@ -158,7 +158,7 @@ float dev(Point p,Point** points, int size){
     between a given point and a given linear regression line.
 */
 float dev(Point p,Line l){
-    float deviationP = abs (p.y - l.f(p.x));
+    float deviationP = fabs (p.y - l.f(p.x));
     return deviationP;
 }
 
