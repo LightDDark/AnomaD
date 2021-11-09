@@ -27,7 +27,7 @@
                 //increase the column count
                 this->columnCount++;
                 //checking if the current one is the time column
-                if (columnName.find("time") | columnName.find("seconds") | columnName.find("Hz")) {
+                if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 || columnName.compare("Hz") == 0) {
                     this->timeCol = columnName;
                 }
                 //insert the name to the first value of the map pair
