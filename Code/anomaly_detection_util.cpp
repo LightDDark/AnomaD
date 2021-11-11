@@ -128,6 +128,7 @@ Line linear_reg(Point** points, int size) {
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->x;
         yArr[i] = points[i]->y;
+        delete points[i];
     }
     // calculating the x-constant of the equation
     // deviding the covariance of the points by the variance of the X variables.

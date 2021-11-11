@@ -9,6 +9,7 @@
 #include <sstream>
 #include <map>
 #include <list>
+#include "anomaly_detection_util.h"
 using namespace std;
 
 class TimeSeries{
@@ -19,10 +20,13 @@ class TimeSeries{
 public:
     explicit TimeSeries(const char* CSVfileName);
     int countColumns() const;
-    unsigned long countRows(string colName);
-    string getColumnName(vector<float>);
-    float getTimeValue(string featureName, float time);
-    std::list<string> getFeatures();
+    unsigned long countRows() const;
+    string getColumnName(vector<float>*) const;
+    float getTimeValue(string featureName, float time) const;
+    std::list<string> getFeatures() const;
+    std::vector<vector<float>*> getColumns() const;
+    string getTimeName() const;
+    Point** returnPoints(string corrA, string corrB) const;
     };
 
 

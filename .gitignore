@@ -30,8 +30,11 @@
 *.exe
 *.out
 *.app
+
 # Json files
 .vscode/launch.json
 .vscode/settings.json
+
 # csv files
-Code/*.csv
+*.csv
+Code/makefile
