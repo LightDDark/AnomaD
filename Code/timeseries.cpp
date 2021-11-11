@@ -6,52 +6,55 @@
  */
 
 //constructor for the map
-    TimeSeries::TimeSeries(const char *CSVfileName) {
-        string line;
-        string columnName;
-        float value;
-        fstream csvFile(CSVfileName);
-        //checking if file opening was unsuccessful
-        if (!csvFile.is_open()) {
-            cout << "cant open" << endl;
-        }
-        //working on the csv file
-        if (csvFile.good()) {
-            //get the first line
-            getline(csvFile, line);
-            //set up a new string stream for the title row
-            stringstream headerStream(line);
-            //as long as the stream has remaining characters, cut them
-            // by comma and insert the string to columnName
-            while (getline(headerStream, columnName, ',')) {
-                //increase the column count
-                this->columnCount++;
-                //checking if the current one is the time column
-                if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 || columnName.compare("Hz") == 0) {
-                    this->timeCol = columnName;
-                }
-                //insert the name to the first value of the map pair
-                this->dataTable.insert({columnName, vector<float>{}});
-            }
-            //for each line of the remaining data, insert the value
-            while (getline(csvFile, line)) {
-                this->lineCount++;
-                stringstream lineStream(line);
-                //for every pair item in the datatable, insert the float value to the vector
-                for (auto &i: this->dataTable) {
-                    lineStream >> value;
-                    i.second.push_back(value);
-                    //skip commas
-                    if (lineStream.peek() == ',') {
-                        lineStream.ignore();
-                    }
-                }
-            }
-            csvFile.close();
-            //printing line for debug, will be removed in the final file
-            cout << dataTable.size() << endl;
-        }
+TimeSeries::TimeSeries(const char *CSVfileName) {
+    string line;
+    string columnName;
+    float value;
+    vector<string> titles;
+    fstream csvFile(CSVfileName);
+    //checking if file opening was unsuccessful
+    if (!csvFile.is_open()) {
+        cout << "cant open" << endl;
     }
+    //working on the csv file
+    if (csvFile.good()) {
+        //get the first line
+        getline(csvFile, line);
+        //set up a new string stream for the title row
+        stringstream headerStream(line);
+        //as long as the stream has remaining characters, cut them
+        // by comma and insert the string to columnName
+        while (getline(headerStream, columnName, ',')) {
+            //increase the column count
+            this->columnCount++;
+            //checking if the current one is the time column
+            if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 || columnName.compare("Hz") == 0) {
+                this->timeCol = columnName;
+            }
+            //insert the name to the first value of the map pair
+            titles.push_back(columnName);
+            //this->dataTable.insert({columnName, vector<float>{}});
+        }
+        //for each line of the remaining data, insert the value
+        while (getline(csvFile, line)) {
+            this->lineCount++;
+            stringstream lineStream(line);
+            //for every pair item in the datatable, insert the float value to the vector
+            for (int i = 0; i < this->columnCount; i++) {
+                dataTable.insert({titles[i],vector<float>{}});
+                lineStream >> value;
+                dataTable.at(titles[i]).push_back(value);
+                //skip commas
+                if (lineStream.peek() == ',') {
+                    lineStream.ignore();
+                }
+            }
+        }
+        csvFile.close();
+        //printing line for debug, will be removed in the final file
+        cout << *(dataTable.at("grade").data()) << endl;
+    }
+}
 //returns number of columns
     int TimeSeries::countColumns() const {
         return this->columnCount;
