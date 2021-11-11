@@ -64,7 +64,7 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         return this->lineCount;
     }
 //returns feature name for a given value
-    string TimeSeries::getColumnName(vector<float> values) const {
+    string TimeSeries::getColumnName(vector<float>* values) const {
         string name = "not found";
         //comparing the vector type with all of the vectors in the map
         for (auto &i: this->dataTable) {

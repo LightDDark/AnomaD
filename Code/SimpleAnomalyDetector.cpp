@@ -40,7 +40,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts){
 			corrrel.feature1 = ts.getColumnName(listOfVectors[i]);
 			corrrel.feature2 = ts.getColumnName(listOfVectors[c]);
 			corrrel.corrlation = currentPearson;
-			corrrel.lin_reg = linear_reg(ts.returnPoints(ts.getColumnName(listOfVectors[i]), ts.getColumnName(listOfVectors[j])), numOfRows);
+			corrrel.lin_reg = linear_reg(ts.returnPoints(ts.getColumnName(listOfVectors[i]), ts.getColumnName(listOfVectors[c])), numOfRows);
 			corrrel.threshold = this->thershold;
 			cf.push_back(corrrel);
 		}
