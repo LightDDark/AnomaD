@@ -60,11 +60,11 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         return this->columnCount;
     }
 //returns number of lines
-    unsigned long TimeSeries::countRows(string colName) {
+    unsigned long TimeSeries::countRows() const {
         return this->lineCount;
     }
 //returns feature name for a given value
-    string TimeSeries::getColumnName(vector<float> values) {
+    string TimeSeries::getColumnName(vector<float>* values) const {
         string name = "not found";
         //comparing the vector type with all of the vectors in the map
         for (auto &i: this->dataTable) {
@@ -75,7 +75,7 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         return name;
     }
     //returns the value of a specific feature in a given time
-    float TimeSeries::getTimeValue(string featureName, float time) {
+    float TimeSeries::getTimeValue(string featureName, float time) const{
         int rowCounter = 0;
         //finding the row of the time
         for (auto &i: this->dataTable.at(this->timeCol)) {
@@ -90,7 +90,7 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         return valueVector[rowCounter];
     }
 //get list of features
-    std::list<string> TimeSeries::getFeatures() {
+    std::list<string> TimeSeries::getFeatures() const{
     list<string> features;
     for (auto &i: this->dataTable) {
         features.push_back(i.first);
