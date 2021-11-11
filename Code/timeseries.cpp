@@ -75,25 +75,45 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         return name;
     }
     //returns the value of a specific feature in a given time
-    float TimeSeries::getTimeValue(string featureName, float time){
-    int rowCounter = 0;
-    //finding the row of the time
-    for (auto  & i : this->dataTable.at(this->timeCol)) {
-        if (i == time) {
-            break;
+    float TimeSeries::getTimeValue(string featureName, float time) {
+        int rowCounter = 0;
+        //finding the row of the time
+        for (auto &i: this->dataTable.at(this->timeCol)) {
+            if (i == time) {
+                break;
+            }
+            rowCounter++;
         }
-        rowCounter++;
+        //create a new vector for the requested feature
+        vector<float> valueVector = this->dataTable.at(featureName);
+        //return the value at the requested time using the row number
+        return valueVector[rowCounter];
     }
-    //create a new vector for the requested feature
-    vector<float> valueVector = this->dataTable.at(featureName);
-    //return the value at the requested time using the row number
-    return valueVector[rowCounter];
-}
 //get list of features
     std::list<string> TimeSeries::getFeatures() {
-        list<string> features;
-        for (auto &i: this->dataTable) {
-            features.push_back(i.first);
-        }
-        return features;
+    list<string> features;
+    for (auto &i: this->dataTable) {
+        features.push_back(i.first);
     }
+    return features;
+}
+//return a vector of all the columns
+vector<const vector<float>*> TimeSeries::getColumns() const{
+    vector<const vector<float>*> colVector;
+    for (auto &i : dataTable) {
+        colVector.push_back(&(i.second));
+    }
+    return colVector;
+}
+string TimeSeries::getTimeName() const {
+    return this->timeCol;
+}
+Point** TimeSeries::returnPoints(vector<float>* corrA, vector<float>* corrB) const {
+    Point **pArray;
+    unsigned long size = (*corrA).size();
+    for (int i = 0; i < size; i++) {
+        auto *p = new Point((*corrA)[i], (*corrB)[i]);
+        pArray[i] = p;
+    }
+    return pArray;
+}

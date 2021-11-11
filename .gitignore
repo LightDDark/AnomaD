@@ -32,3 +32,5 @@
 *.app
 .vscode/launch.json
 .vscode/settings.json
+/Code/CMakeLists.txt
+/CMakeLists.txt

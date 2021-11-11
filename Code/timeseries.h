@@ -9,6 +9,8 @@
 #include <sstream>
 #include <map>
 #include <list>
+#include "anomaly_detection_util.h"
+
 using namespace std;
 
 class TimeSeries{
@@ -23,6 +25,9 @@ public:
     string getColumnName(vector<float>);
     float getTimeValue(string featureName, float time);
     std::list<string> getFeatures();
+    std::vector<const vector<float>*> getColumns() const;
+    string getTimeName() const;
+    Point** returnPoints(vector<float>* corrA, vector<float>* corrB) const;
     };
 
 
