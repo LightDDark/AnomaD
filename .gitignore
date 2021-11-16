@@ -34,6 +34,8 @@
 # Json files
 .vscode/launch.json
 .vscode/settings.json
+/Code/CMakeLists.txt
+/CMakeLists.txt
 
 # csv files
 *.csv
