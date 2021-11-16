@@ -50,11 +50,20 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts){
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
 	vector<AnomalyReport> report;
-	int size = cf.size();
-	for (int i = 0; i < size; i++) {
+	int corSize = cf.size();
+	unsigned long colSize = ts.countRows();
+	for (int i = 0; i < corSize; i++) {
 		string feature1 = cf[i].feature1;
 		string feature2 = cf[i].feature2;
 		Line lineReg = cf[i].lin_reg;
+		float threshold = cf[i].threshold;
+		Point** points = ts.returnPoints(feature1, feature2);
+		for (unsigned long j = 0; j < colSize; j++) {
+			if (dev(*points[j], lineReg) > threshold) {
+				AnomalyReport rep(feature1 + "-" + feature2, j+1);
+				report.push_back(rep);
+			}
+		}
 	}
 	// TODO Auto-generated destructor stub
 	return  report;
