@@ -28,13 +28,15 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
             //increase the column count
             this->columnCount++;
             //checking if the current one is the time column
-            if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 || columnName.compare("Hz") == 0) {
+            if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 ||
+                columnName.compare("Hz") == 0) {
                 this->timeCol = columnName;
             }
             //insert the name to the first value of the map pair
             titles.push_back(columnName);
             //this->dataTable.insert({columnName, vector<float>{}});
         }
+
         //for each line of the remaining data, insert the value
         while (getline(csvFile, line)) {
             this->lineCount++;
@@ -51,46 +53,45 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
             }
         }
         csvFile.close();
-        //printing line for debug, will be removed in the final file
-        cout << *(dataTable.at("grade").data()) << endl;
     }
 }
+
 //returns number of columns
-    int TimeSeries::countColumns() const {
-        return this->columnCount;
-    }
+int TimeSeries::countColumns() const {
+    return this->columnCount;
+}
 //returns number of lines
-    unsigned long TimeSeries::countRows(string colName) {
-        return this->lineCount;
-    }
+unsigned long TimeSeries::countRows(string colName)const {
+    return this->lineCount;
+}
 //returns feature name for a given value
-    string TimeSeries::getColumnName(vector<float> values) {
-        string name = "not found";
-        //comparing the vector type with all of the vectors in the map
-        for (auto &i: this->dataTable) {
-            if (i.second == values) {
-                name = i.first;
-            }
+string TimeSeries::getColumnName(vector<float> values)const{
+    string name = "not found";
+    //comparing the vector type with all the vectors in the map
+    for (auto &i: this->dataTable) {
+        if (i.second == values) {
+            name = i.first;
         }
-        return name;
     }
-    //returns the value of a specific feature in a given time
-    float TimeSeries::getTimeValue(string featureName, float time) {
-        int rowCounter = 0;
-        //finding the row of the time
-        for (auto &i: this->dataTable.at(this->timeCol)) {
-            if (i == time) {
-                break;
-            }
-            rowCounter++;
+    return name;
+}
+//returns the value of a specific feature in a given time
+float TimeSeries::getTimeValue(string featureName, float time)const {
+    int rowCounter = 0;
+    //finding the row of the time
+    for (auto &i: this->dataTable.at(this->timeCol)) {
+        if (i == time) {
+            break;
         }
-        //create a new vector for the requested feature
-        vector<float> valueVector = this->dataTable.at(featureName);
-        //return the value at the requested time using the row number
-        return valueVector[rowCounter];
+        rowCounter++;
     }
+    //create a new vector for the requested feature
+    vector<float> valueVector = this->dataTable.at(featureName);
+    //return the value at the requested time using the row number
+    return valueVector[rowCounter];
+}
 //get list of features
-    std::list<string> TimeSeries::getFeatures() {
+std::list<string> TimeSeries::getFeatures()const {
     list<string> features;
     for (auto &i: this->dataTable) {
         features.push_back(i.first);
@@ -105,15 +106,31 @@ vector<const vector<float>*> TimeSeries::getColumns() const{
     }
     return colVector;
 }
+//returning the name of the time column
 string TimeSeries::getTimeName() const {
     return this->timeCol;
 }
+//returning ptr to array of ptrs to Point objects from two correlated features
 Point** TimeSeries::returnPoints(vector<float>* corrA, vector<float>* corrB) const {
     Point **pArray;
     unsigned long size = (*corrA).size();
+    //for each ptr of Point, insert new point using the values from the feature data vector
     for (int i = 0; i < size; i++) {
         auto *p = new Point((*corrA)[i], (*corrB)[i]);
+        //insert the point to the new array
         pArray[i] = p;
     }
     return pArray;
+}
+//get feature values using the column name
+const vector<float>* TimeSeries::getValues(string columnName) const{
+    //look for the column in the data table
+    for (auto &i : dataTable){
+        if (i.first.compare(columnName)){
+            //if found, return the data vector
+            return &(i.second);
+        }
+        //if not found, return null pointer
+        return nullptr;
+    }
 }
