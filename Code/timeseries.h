@@ -21,7 +21,6 @@ class TimeSeries{
 public:
     explicit TimeSeries(const char* CSVfileName);
     int countColumns() const;
-<<<<<<< HEAD
     unsigned long countRows(string colName)const;
     string getColumnName(vector<float>)const;
     float getTimeValue(string featureName, float time)const;
