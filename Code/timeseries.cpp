@@ -7,8 +7,7 @@
 
 //constructor for the map
 TimeSeries::TimeSeries(const char *CSVfileName) {
-    string line;
-    string columnName;
+    string line, columnName;
     float value;
     vector<string> titles;
     fstream csvFile(CSVfileName);
@@ -24,11 +23,12 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         stringstream headerStream(line);
         //as long as the stream has remaining characters, cut them
         // by comma and insert the string to columnName
+
         while (getline(headerStream, columnName, ',')) {
             //increase the column count
             this->columnCount++;
             //checking if the current one is the time column
-            if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 ||
+            if (columnName.find("time") == 0 ||  columnName.compare("seconds") == 0 ||
                 columnName.compare("Hz") == 0) {
                 this->timeCol = columnName;
             }
@@ -36,6 +36,10 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
             titles.push_back(columnName);
             //this->dataTable.insert({columnName, vector<float>{}});
         }
+
+        //removing the '/r' char from the last title
+        titles.pop_back();
+        titles.push_back(removeEOL(columnName));
 
         //for each line of the remaining data, insert the value
         while (getline(csvFile, line)) {
@@ -133,4 +137,11 @@ const vector<float>* TimeSeries::getValues(string columnName) const{
         //if not found, return null pointer
         return nullptr;
     }
+}
+
+string TimeSeries::removeEOL(string last) const {
+    if (!last.empty()) {
+        last.pop_back();
+    }
+    return last;
 }
