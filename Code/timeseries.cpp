@@ -61,7 +61,7 @@ int TimeSeries::countColumns() const {
     return this->columnCount;
 }
 //returns number of lines
-unsigned long TimeSeries::countRows(string colName)const {
+unsigned long TimeSeries::countRows()const {
     return this->lineCount;
 }
 //returns feature name for a given value
@@ -111,7 +111,7 @@ string TimeSeries::getTimeName() const {
     return this->timeCol;
 }
 //returning ptr to array of ptrs to Point objects from two correlated features
-Point** TimeSeries::returnPoints(vector<float>* corrA, vector<float>* corrB) const {
+Point** TimeSeries::returnPoints(const vector<float>* corrA, const vector<float>* corrB) const {
     Point **pArray;
     unsigned long size = (*corrA).size();
     //for each ptr of Point, insert new point using the values from the feature data vector

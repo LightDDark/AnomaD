@@ -21,14 +21,14 @@ class TimeSeries{
 public:
     explicit TimeSeries(const char* CSVfileName);
     int countColumns() const;
-    unsigned long countRows(string colName)const;
+    unsigned long countRows()const;
     string getColumnName(vector<float>)const;
     float getTimeValue(string featureName, float time)const;
     std::list<string> getFeatures()const;
     const vector<float>* getValues(string columnName) const;
     std::vector<const vector<float>*> getColumns() const;
     string getTimeName() const;
-    Point** returnPoints(vector<float>* corrA, vector<float>* corrB) const;
+    Point** returnPoints(const vector<float>* corrA, const vector<float>* corrB) const;
     vector<string> extractFeatures(fstream csvStream) const;
     };
 

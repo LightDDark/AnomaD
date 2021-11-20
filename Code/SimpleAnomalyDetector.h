@@ -20,7 +20,18 @@ struct correlatedFeatures{
 
 class SimpleAnomalyDetector:public TimeSeriesAnomalyDetector{
 	vector<correlatedFeatures> cf;
-	const float thershold = 0.3;
+	const float thershold = 0.2;
+
+	virtual float maxDev(const Point** points, const Line &regLine, const int size) const {
+		float maxDev = 0;
+		for (int i = 0; i < size; i++) {
+			float newDev = dev(*points[i], regLine);
+			if (maxDev < newDev) {
+				maxDev = newDev;
+			}
+		}
+		return maxDev;
+	}
 public:
 	SimpleAnomalyDetector();
 	virtual ~SimpleAnomalyDetector();
