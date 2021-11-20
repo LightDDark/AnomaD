@@ -28,7 +28,7 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
             //increase the column count
             this->columnCount++;
             //checking if the current one is the time column
-            if (columnName.find("time") == 0 ||  columnName.compare("seconds") == 0 ||
+            if (columnName.compare("time") == 0 ||  columnName.compare("seconds") == 0 ||
                 columnName.compare("Hz") == 0) {
                 this->timeCol = columnName;
             }
@@ -38,8 +38,8 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
         }
 
         //removing the '/r' char from the last title
-        titles.pop_back();
-        titles.push_back(removeEOL(columnName));
+        //titles.pop_back();
+        //titles.push_back(removeEOL(columnName));
 
         //for each line of the remaining data, insert the value
         while (getline(csvFile, line)) {
@@ -116,8 +116,8 @@ string TimeSeries::getTimeName() const {
 }
 //returning ptr to array of ptrs to Point objects from two correlated features
 Point** TimeSeries::returnPoints(const vector<float>* corrA, const vector<float>* corrB) const {
-    Point **pArray;
     unsigned long size = (*corrA).size();
+    Point **pArray = new Point*[size];
     //for each ptr of Point, insert new point using the values from the feature data vector
     for (int i = 0; i < size; i++) {
         auto *p = new Point((*corrA)[i], (*corrB)[i]);
@@ -134,9 +134,9 @@ const vector<float>* TimeSeries::getValues(string columnName) const{
             //if found, return the data vector
             return &(i.second);
         }
-        //if not found, return null pointer
-        return nullptr;
     }
+    //if not found, return null pointer
+        return nullptr;
 }
 
 string TimeSeries::removeEOL(string last) const {
