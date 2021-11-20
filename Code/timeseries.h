@@ -30,7 +30,8 @@ public:
     string getTimeName() const;
     Point** returnPoints(const vector<float>* corrA, const vector<float>* corrB) const;
     vector<string> extractFeatures(fstream csvStream) const;
-    };
+    string removeEOL(string last) const;
+};
 
 
 

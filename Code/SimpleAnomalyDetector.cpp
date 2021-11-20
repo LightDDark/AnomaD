@@ -53,6 +53,7 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
 	vector<AnomalyReport> report;
 	unsigned long colSize = ts.countRows();
 	for (correlatedFeatures &corF : cf) {
+
 		string feature1 = corF.feature1;
 		string feature2 = corF.feature2;
 		Line lineReg = corF.lin_reg;
