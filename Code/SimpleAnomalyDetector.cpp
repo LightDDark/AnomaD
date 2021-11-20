@@ -38,12 +38,12 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts){
 		}
 		if (c != -1 && finalPearson > this->thershold) {
 			correlatedFeatures corrrel;
-			Point** points = ts.returnPoints(listOfVectors[i], listOfVectors[c]); //ewmwmbwe to delete points
+			Point** points = ts.returnPoints(listOfVectors[i], listOfVectors[c]); //remember to delete points
 			corrrel.feature1 = ts.getColumnName(*listOfVectors[i]);
 			corrrel.feature2 = ts.getColumnName(*listOfVectors[c]);
 			corrrel.corrlation = finalPearson;
 			corrrel.lin_reg = linear_reg(points, numOfRows);
-			corrrel.threshold = maxDev(points, corrrel.lin_reg, numOfRows);
+			corrrel.threshold = maxDev(points, corrrel.lin_reg, numOfRows) * 1.1;
 			cf.push_back(corrrel);
 		}
 	}

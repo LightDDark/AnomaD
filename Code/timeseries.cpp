@@ -130,7 +130,7 @@ Point** TimeSeries::returnPoints(const vector<float>* corrA, const vector<float>
 const vector<float>* TimeSeries::getValues(string columnName) const{
     //look for the column in the data table
     for (auto &i : dataTable){
-        if (i.first.compare(columnName)){
+        if (i.first.compare(columnName) == 0){
             //if found, return the data vector
             return &(i.second);
         }
