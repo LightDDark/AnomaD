@@ -18,7 +18,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts){
 	std::vector<const vector<float>*> listOfVectors = ts.getColumns();
 	for (int i = 0; i < numOfCol; i++)
 	{
-		if (ts.getColumnName(*listOfVectors[i]) == timeName) {
+		if (timeName.compare("") != 0 && ts.getColumnName(*listOfVectors[i]).compare(timeName) == 0) {
 			continue;
 		}
 		
@@ -26,9 +26,10 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts){
 		int c = -1;
 		for (int j = i + 1; j < numOfCol; j++)
 		{
-			if(ts.getColumnName(*listOfVectors[j]) == timeName) {
+			if(timeName.compare("") != 0 && ts.getColumnName(*listOfVectors[i]).compare(timeName) == 0) {
 				continue;
 			}
+			const float* first = listOfVectors[i]->data();
 			float currentPearson = std::abs(pearson(listOfVectors[i]->data(), listOfVectors[j]->data(), numOfRows));
 			if (currentPearson > finalPearson) {
 				finalPearson = currentPearson;
@@ -37,7 +38,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries& ts){
 		}
 		if (c != -1 && finalPearson > this->thershold) {
 			correlatedFeatures corrrel;
-			Point** points = ts.returnPoints(listOfVectors[i], listOfVectors[c]);
+			Point** points = ts.returnPoints(listOfVectors[i], listOfVectors[c]); //ewmwmbwe to delete points
 			corrrel.feature1 = ts.getColumnName(*listOfVectors[i]);
 			corrrel.feature2 = ts.getColumnName(*listOfVectors[c]);
 			corrrel.corrlation = finalPearson;
@@ -53,7 +54,6 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
 	vector<AnomalyReport> report;
 	unsigned long colSize = ts.countRows();
 	for (correlatedFeatures &corF : cf) {
-
 		string feature1 = corF.feature1;
 		string feature2 = corF.feature2;
 		Line lineReg = corF.lin_reg;
