@@ -86,7 +86,9 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
 				AnomalyReport rep(feature1 + "-" + feature2, j+1);
 				report.push_back(rep);
 			}
+			delete points[j];
 		}	
+		delete[] points;
 	}
 
 	// return report
