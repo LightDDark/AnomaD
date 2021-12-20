@@ -49,7 +49,7 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
     for (correlatedFeatures &corF : cf) {
         string feature1 = corF.feature1;
         string feature2 = corF.feature2;
-        Line lineReg = corF.lin_reg;
+        //Line lineReg = corF.lin_reg;
         float threshold = corF.threshold;
         // get the current points of the features
         Point** points = returnPoints(ts.getValues(feature1), ts.getValues(feature2));

@@ -9,7 +9,6 @@
 #include "minCircle.h"
 
 class HybridAnomalyDetector:public SimpleAnomalyDetector{
-    vector<correlatedFeatures> cf;
     const float thresholdSimple;
     const float thresholdHybrid;
 public:

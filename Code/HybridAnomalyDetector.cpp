@@ -45,6 +45,9 @@ void HybridAnomalyDetector::updateCorrMEC(Point** points, string feature1, strin
 }
 
 bool HybridAnomalyDetector::checkAnomaly(correlatedFeatures &corF, Point point){
-    return (isWithin(corF.enc_circle, point));
+    if (corF.corrlation >= thresholdSimple){
+        return (dev(point, corF.lin_reg) > corF.threshold);
+    }
+    return !(isWithin(corF.enc_circle, corF.threshold, point));
 }
 
