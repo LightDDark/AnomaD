@@ -34,7 +34,7 @@ float avg(const float* x, int size){
 * note that capital letters denotes Array/Pointer and small letters denotes values
 */
 float var(const float* x, int size){
-    // copy x values to a new array (dynamic), in order to not affect x with further manipulations. 
+    // copy x values to a new array (dynamic), in order to not affect x with further manipulations.
     float* newX = copyPointer(x, size);
     // calculate average
     float u = avg(newX, size);
@@ -128,7 +128,6 @@ Line linear_reg(Point** points, int size) {
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->x;
         yArr[i] = points[i]->y;
-        //delete points[i];
     }
     // calculating the x-constant of the equation
     // deviding the covariance of the points by the variance of the X variables.
@@ -136,7 +135,7 @@ Line linear_reg(Point** points, int size) {
     // calculating the average for X and Y
     float avrgX = avg(xArr, size);
     float avrgY = avg(yArr, size);
-    // calculating the b constant 
+    // calculating the b constant
     float b = avrgY - (avrgX * a);
     // asssigning the values to the line object
     reg.a = a;
@@ -155,11 +154,10 @@ float dev(Point p,Point** points, int size){
 }
 
 /*
-    this function claculates the deviation point 
+    this function claculates the deviation point
     between a given point and a given linear regression line.
 */
 float dev(Point p,Line l){
     float deviationP = fabs (p.y - l.f(p.x));
     return deviationP;
 }
-
