@@ -9,7 +9,7 @@
 #include "anomaly_detection_util.h"
 
 // Declares assisting functions
-float* copyPointer(float* x, int size);
+float* copyPointer(const float* x, int size);
 void powfArr(float* x, int size, int power);
 
 /*
@@ -17,7 +17,7 @@ void powfArr(float* x, int size, int power);
 * and returns the average of the array
 * by summin x values and dividing them by given size
 */
-float avg(float* x, int size){
+float avg(const float* x, int size){
     // delcare variable for summin x values
     float sum = 0;
     // sum all values
@@ -33,8 +33,8 @@ float avg(float* x, int size){
 * suing the formula Var(X) = avg(x^2) - avg(x)^2
 * note that capital letters denotes Array/Pointer and small letters denotes values
 */
-float var(float* x, int size){
-    // copy x values to a new array (dynamic), in order to not affect x with further manipulations. 
+float var(const float* x, int size){
+    // copy x values to a new array (dynamic), in order to not affect x with further manipulations.
     float* newX = copyPointer(x, size);
     // calculate average
     float u = avg(newX, size);
@@ -54,7 +54,7 @@ float var(float* x, int size){
 * by using the formula cov(X,Y) = avg(x-avg(X)(y-avg(Y))
 * note that capital letters denotes Array/Pointer and small letters denotes values.
 */
-float cov(float* x, float* y, int size){
+float cov(const float* x, const float* y, int size){
     // calculates average of each X and Y
     float avgX = avg(x, size);
     float avgY = avg(y, size);
@@ -73,7 +73,7 @@ float cov(float* x, float* y, int size){
 * returns the Pearson correlation coefficient of X and Y,
 * according to the formula cov(X,Y)/(sqr(var(x))*sqr(var(y)))
 */
-float pearson(float* x, float* y, int size){
+float pearson(const float* x, const float* y, int size){
     // calculate the square root of var for each array
     float sqrVarX = sqrt(var(x, size));
     float sqrVarY = sqrt(var(y, size));
@@ -87,7 +87,7 @@ float pearson(float* x, float* y, int size){
 * function copyPointer, copies the content of float pointer x,
 * given it's size into a new allocated memory.
 */
-float* copyPointer(float* x, int size) {
+float* copyPointer(const float* x, int size) {
     // declares pointer to float at the SIZE of size
     float* newX = new float[size];
     // checks the allocation was succesful
@@ -128,7 +128,6 @@ Line linear_reg(Point** points, int size) {
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->x;
         yArr[i] = points[i]->y;
-        delete points[i];
     }
     // calculating the x-constant of the equation
     // deviding the covariance of the points by the variance of the X variables.
@@ -136,7 +135,7 @@ Line linear_reg(Point** points, int size) {
     // calculating the average for X and Y
     float avrgX = avg(xArr, size);
     float avrgY = avg(yArr, size);
-    // calculating the b constant 
+    // calculating the b constant
     float b = avrgY - (avrgX * a);
     // asssigning the values to the line object
     reg.a = a;
@@ -155,11 +154,10 @@ float dev(Point p,Point** points, int size){
 }
 
 /*
-    this function claculates the deviation point 
+    this function claculates the deviation point
     between a given point and a given linear regression line.
 */
 float dev(Point p,Line l){
     float deviationP = fabs (p.y - l.f(p.x));
     return deviationP;
 }
-
