@@ -12,8 +12,12 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <math.h>
+#include "minCircle.h"
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
+
 
 void generateTrainCSV(float a1,float b1, float a2, float b2, float a3, float b3){
     ofstream out("trainFile.csv");
@@ -90,6 +94,9 @@ void checkCorrelation(correlatedFeatures c,string f1, string f2, float a, float 
         }
     }
 
+
+	cout<<"done"<<endl;
+	return 0;
 }
 
 int main(){
