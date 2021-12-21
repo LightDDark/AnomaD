@@ -1,9 +1,10 @@
+
 #include "minCircle.h"
 #include <assert.h>
 #include <math.h>
 
 // returns distance between two points
-float pointDistance(const Point& p1, const Point& p2) {
+double pointDistance(const Point& p1, const Point& p2) {
     // calculates and return distance
     return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
 }
@@ -13,7 +14,10 @@ bool isWithin(const Circle c, const Point& p) {
     // is distance is <= radius then it's within/on boundary
     return pointDistance(c.center, p) <= c.radius;
 }
-
+bool isWithin(const Circle c, const float radius, const Point& p) {
+    // is distance is <= radius then it's within/on boundary
+    return pointDistance(c.center, p) <= radius;
+}
 
 // creates a circle from three points
 Circle createCircle(const Point& p1, const Point& p2, const Point& p3) {
@@ -27,12 +31,12 @@ Circle createCircle(const Point& p1, const Point& p2, const Point& p3) {
     double rem3Srq = pow(p3XRem, 2) +  pow(p3YRem, 2);
     double remSqr = p2XRem * p3YRem - p2YRem * p3XRem;
     // claculates center
-    float centerX = p1.x + (p3YRem * rem2Srq - p2YRem * rem3Srq) / (2 * remSqr); 
-    float centerY = p1.y + (p2XRem * rem3Srq - p3XRem * rem2Srq) / (2 * remSqr); 
+    float centerX = p1.x + (p3YRem * rem2Srq - p2YRem * rem3Srq) / (2 * remSqr);
+    float centerY = p1.y + (p2XRem * rem3Srq - p3XRem * rem2Srq) / (2 * remSqr);
     Point center(centerX, centerY);
     // returns Circle with radius of distance from p1 to center
     return Circle(center, pointDistance(center, p1));
-} 
+}
 
 // creates a circle from two points
 Circle createCircle(const Point& p1, const Point& p2) {
@@ -59,25 +63,25 @@ Circle trivialMinCircle(vector<Point*>& boundaryPoints) {
     size_t size = boundaryPoints.size();
     // calculate circle according to size
     switch (size) {
-    case 0:
-        return Circle(Point(0, 0), 0);
-    case 1:
-        return Circle(*boundaryPoints[0], 0);
-    case 2:
-        return createCircle(*boundaryPoints[0], *boundaryPoints[1]);
-    default:
-        // cheks to see if can create valid circle with only two points
-        for (size_t i = 0; i < 3; i++) {
-            for (size_t j = i + 1; j < 3; j++) {
-                Circle c = createCircle(*boundaryPoints[i], *boundaryPoints[j]);
-                if (isValid(c, boundaryPoints)) {
-                    return c;
+        case 0:
+            return Circle(Point(0, 0), 0);
+        case 1:
+            return Circle(*boundaryPoints[0], 0);
+        case 2:
+            return createCircle(*boundaryPoints[0], *boundaryPoints[1]);
+        default:
+            // cheks to see if can create valid circle with only two points
+            for (size_t i = 0; i < 3; i++) {
+                for (size_t j = i + 1; j < 3; j++) {
+                    Circle c = createCircle(*boundaryPoints[i], *boundaryPoints[j]);
+                    if (isValid(c, boundaryPoints)) {
+                        return c;
+                    }
                 }
+
             }
-            
-        }
-        
-        return createCircle(*boundaryPoints[0], *boundaryPoints[1],  *boundaryPoints[2]);
+
+            return createCircle(*boundaryPoints[0], *boundaryPoints[1],  *boundaryPoints[2]);
     }
 }
 
@@ -115,6 +119,6 @@ Circle welzlMiniCircle(Point**& points, vector<Point*> boundaryPoints, size_t si
 
 // Finds the smallest circle that encapsulates all points
 Circle findMinCircle(Point** points,size_t size) {
-     vector<Point*> boundaryPoints;
-     return welzlMiniCircle(points, boundaryPoints, size);
+    vector<Point*> boundaryPoints;
+    return welzlMiniCircle(points, boundaryPoints, size);
 }

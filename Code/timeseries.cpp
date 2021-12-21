@@ -125,7 +125,7 @@ const vector<float>* TimeSeries::getValues(string columnName) const{
         }
     }
     //if not found, return null pointer
-        return nullptr;
+    return nullptr;
 }
 
 string TimeSeries::removeEOL(string last) const {
