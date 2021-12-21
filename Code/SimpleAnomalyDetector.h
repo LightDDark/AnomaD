@@ -24,11 +24,6 @@ struct correlatedindex{
     float corrlation;
 };
 
-struct correlatedindex{
-	int corrAIndex, corrBIndex; // indexes of correlated features on vector list
-	float corrlation;
-};
-
 
 class SimpleAnomalyDetector:public TimeSeriesAnomalyDetector{
     const float thershold;
