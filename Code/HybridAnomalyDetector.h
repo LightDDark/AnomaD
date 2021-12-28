@@ -9,8 +9,8 @@
 #include "minCircle.h"
 
 class HybridAnomalyDetector:public SimpleAnomalyDetector{
-    const float thresholdSimple;
-    const float thresholdHybrid;
+protected:
+    float thresholdHybrid;
 public:
     HybridAnomalyDetector();
     virtual ~HybridAnomalyDetector();
