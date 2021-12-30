@@ -114,18 +114,7 @@ vector<const vector<float>*> TimeSeries::getColumns() const{
 string TimeSeries::getTimeName() const {
     return this->timeCol;
 }
-//returning ptr to array of ptrs to Point objects from two correlated features
-Point** TimeSeries::returnPoints(const vector<float>* corrA, const vector<float>* corrB) const {
-    unsigned long size = (*corrA).size();
-    Point **pArray = new Point*[size];
-    //for each ptr of Point, insert new point using the values from the feature data vector
-    for (int i = 0; i < size; i++) {
-        auto *p = new Point((*corrA)[i], (*corrB)[i]);
-        //insert the point to the new array
-        pArray[i] = p;
-    }
-    return pArray;
-}
+
 //get feature values using the column name
 const vector<float>* TimeSeries::getValues(string columnName) const{
     //look for the column in the data table
@@ -136,7 +125,7 @@ const vector<float>* TimeSeries::getValues(string columnName) const{
         }
     }
     //if not found, return null pointer
-        return nullptr;
+    return nullptr;
 }
 
 string TimeSeries::removeEOL(string last) const {

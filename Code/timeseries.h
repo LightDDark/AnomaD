@@ -28,7 +28,6 @@ public:
     const vector<float>* getValues(string columnName) const;
     std::vector<const vector<float>*> getColumns() const;
     string getTimeName() const;
-    Point** returnPoints(const vector<float>* corrA, const vector<float>* corrB) const;
     vector<string> extractFeatures(fstream csvStream) const;
     string removeEOL(string last) const;
 };
