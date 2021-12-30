@@ -157,9 +157,10 @@ public:
 			dio->read(&userIn);
 			if (userIn >= 0 && userIn <= 1) {
 				state = false;
+			} else {
+				dio->write("‫‪please‬‬ ‫‪choose‬‬ ‫‪a‬‬ ‫‪value‬‬ ‫‪between‬‬ ‫‪0‬‬ ‫‪and‬‬ ‫‪1.‬‬\n");
+				string s = dio->read();
 			}
-			dio->write("‫‪please‬‬ ‫‪choose‬‬ ‫‪a‬‬ ‫‪value‬‬ ‫‪between‬‬ ‫‪0‬‬ ‫‪and‬‬ ‫‪1.‬‬\n");
-			string s = s = dio->read();
 		} while (state);
 		
 		this->detector->setThreshold(userIn);
