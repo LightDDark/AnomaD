@@ -85,7 +85,7 @@ public:
 		}
     	
     	file.close();
-		dio->write("‫‪Upload complete\n");
+		dio->write("Upload complete\n");
 	}
 };
 
@@ -94,7 +94,7 @@ public:
 	// uses default file name and prompt
 	TrainCsv(DefaultIO* dio):Upload(dio) {
 		this->fileName = "anomalyTrain.csv";
-		setDesc("‫‪Please upload your local train CSV file.‬‬");
+		setDesc("Please upload your local train CSV file.");
 	}
 
 	// in case of spesific fileName and prompt
