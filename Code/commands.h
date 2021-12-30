@@ -50,10 +50,10 @@ class MacroCommand:public Command {
 protected:
 	vector<Command*> commands;
 
-	virtual void loadCommands()=0;
+	
 public:
 	MacroCommand(DefaultIO* dio):Command(dio) {
-		loadCommands();
+		// empty, loads commands into vector
 	}
 	//CsvUpload():Command(new StdIO()){}
 
@@ -123,16 +123,12 @@ public:
 
 // macro class that reads from user and save csv file for time series
 class CsvUpload:public MacroCommand{
-protected:
-
-	void loadCommands() {
-		commands.push_back(new TrainCsv(dio));
-		commands.push_back(new TestCsv(dio));
-	}
 
 public:
 	CsvUpload(DefaultIO* dio): MacroCommand(dio) {
 		setDesc("upload a time series csv file");
+		commands.push_back(new TrainCsv(dio));
+		commands.push_back(new TestCsv(dio));
 	}
 	//CsvUpload():Command(new StdIO()){}
 };
