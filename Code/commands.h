@@ -46,13 +46,13 @@ public:
 // implement here your command classes
 
 // abstract class for macro commands
-class ‫‪MacroCommand‬‬:public Command {
+class MacroCommand:public Command {
 protected:
 	vector<Command*> commands;
 
 	virtual void loadCommands()=0;
 public:
-	‫‪MacroCommand‬‬(DefaultIO* dio):Command(dio) {
+	MacroCommand(DefaultIO* dio):Command(dio) {
 		loadCommands();
 	}
 	//CsvUpload():Command(new StdIO()){}
@@ -85,7 +85,7 @@ public:
 		}
     	
     	file.close();
-		dio->write("‫‪Upload‬‬ ‫‪complete‬‬");
+		dio->write("‫‪Upload complete\n");
 	}
 };
 
@@ -93,8 +93,8 @@ class TrainCsv:public Upload {
 public:
 	// uses default file name and prompt
 	TrainCsv(DefaultIO* dio):Upload(dio) {
-		this->fileName = "‫‪anomalyTrain.csv‬‬‬‬";
-		setDesc("‫‪Please‬‬ ‫‪upload‬‬ ‫‪your‬‬ ‫‪local‬‬ ‫‪train‬‬ ‫‪CSV‬‬ ‫‪file.‬‬");
+		this->fileName = "anomalyTrain.csv";
+		setDesc("‫‪Please upload your local train CSV file.‬‬");
 	}
 
 	// in case of spesific fileName and prompt
@@ -109,8 +109,8 @@ class TestCsv:public Upload {
 public:
 	// uses default file name and prompt
 	TestCsv(DefaultIO* dio):Upload(dio) {
-		this->fileName = "‫‪‫‪anomalyTest.csv‬‬";
-		setDesc("‫‪Please‬‬ ‫‪upload‬‬ ‫‪your‬‬ ‫‪local‬‬ ‫‪test‬‬ ‫‪CSV‬‬ ‫‪file.‬‬");
+		this->fileName = "anomalyTest.csv";
+		setDesc("Please upload your local test CSV file.");
 	}
 
 	// in case of spesific fileName and prompt
@@ -122,7 +122,7 @@ public:
 };
 
 // macro class that reads from user and save csv file for time series
-class CsvUpload:public ‫‪MacroCommand‬‬ {
+class CsvUpload:public MacroCommand{
 protected:
 
 	void loadCommands() {
@@ -131,8 +131,8 @@ protected:
 	}
 
 public:
-	CsvUpload(DefaultIO* dio):‫‪MacroCommand‬‬(dio) {
-		setDesc("‫‪upload‬‬ ‫‪a‬‬ ‫‪time‬‬ ‫‪series‬‬ ‫‪csv‬‬ ‫‪file‬‬");
+	CsvUpload(DefaultIO* dio): MacroCommand(dio) {
+		setDesc("upload a time series csv file");
 	}
 	//CsvUpload():Command(new StdIO()){}
 };
@@ -142,7 +142,7 @@ class AlgoSett:public Command {
 	SimpleAnomalyDetector* detector;
 public:
 	AlgoSett(DefaultIO* dio, SimpleAnomalyDetector* detector):Command(dio) {
-		setDesc("‫‪algorithm‬‬ ‫‪settings‬‬");
+		setDesc("algorithm settings");
 		this->detector=detector;
 	}
 	//CsvUpload():Command(new StdIO()){}
@@ -151,14 +151,14 @@ public:
 		float userIn;
 		bool state = true;
 		do {
-			dio->write("‫‪The‬‬ ‫‪current‬‬ ‫‪correlation‬‬ ‫‪threshold‬‬ ‫‪is‬‬ ");
+			dio->write("The current correlation threshold is ");
 			dio->write(detector->getThreshold());
 			dio->write("\n");
 			dio->read(&userIn);
 			if (userIn >= 0 && userIn <= 1) {
 				state = false;
 			} else {
-				dio->write("‫‪please‬‬ ‫‪choose‬‬ ‫‪a‬‬ ‫‪value‬‬ ‫‪between‬‬ ‫‪0‬‬ ‫‪and‬‬ ‫‪1.‬‬\n");
+				dio->write("please choose a value between 0 and 1.\n");
 				string s = dio->read();
 			}
 		} while (state);
@@ -177,11 +177,11 @@ class Detect:public Command {
 
 public:
 	Detect(DefaultIO* dio, SimpleAnomalyDetector* detector, vector<AnomalyReport>* reports):Command(dio) {
-		setDesc("‫‪detect‬‬ ‫‪anomalies‬‬");
+		setDesc("detect anomalies");
 		this->detector = detector;
 		this->reports = reports;
-		this->testFile = "‫‪‫‪anomalyTest.csv";
-		this->trainFile = "‫‪anomalyTrain.csv";
+		this->testFile = "anomalyTest.csv";
+		this->trainFile = "anomalyTrain.csv";
 	}
 	//CsvUpload():Command(new StdIO()){}
 
@@ -198,7 +198,7 @@ class DisplayAnomad:public Command {
 	vector<AnomalyReport>* reports;
 public:
 	DisplayAnomad(DefaultIO* dio, vector<AnomalyReport>* reports):Command(dio) {
-		setDesc("‫‪display‬‬ ‫‪results‬‬");
+		setDesc("display results");
 		this->reports = reports;
 	}
 	//CsvUpload():Command(new StdIO()){}
@@ -208,7 +208,7 @@ public:
 			this->dio->write(report.timeStep);
 			this->dio->write("\t" + report.description + "\n");
 		}
-		dio->write("‫‪Done.‬‬\n");
+		dio->write("Done.\n");
 	}
 
 };
@@ -218,7 +218,7 @@ class AnalyzeResults:public Command {
 	vector<AnomalyReport>* reports;
 public:
 	AnalyzeResults(DefaultIO* dio, vector<AnomalyReport>* reports):Command(dio) {
-		setDesc("‫‪upload‬‬ ‫‪anomalies‬‬ ‫‪and‬‬ ‫‪analyze‬‬ ‫‪results‬‬");
+		setDesc("upload anomalies and analyze results");
 		this->reports = reports;
 	}
 	//CsvUpload():Command(new StdIO()){}
@@ -233,7 +233,7 @@ class Exit:public Command {
 	bool* state;
 public:
 	Exit(DefaultIO* dio, bool* state):Command(dio) {
-		setDesc("‫‪exit‬‬");
+		setDesc("exit");
 		this->state = state;
 	}
 	//CsvUpload():Command(new StdIO()){}
