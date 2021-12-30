@@ -1,8 +1,8 @@
 
 #include "SimpleAnomalyDetector.h"
 
-SimpleAnomalyDetector::SimpleAnomalyDetector() : thershold( 0.9 ) {
-    // TODO Auto-generated constructor stub
+SimpleAnomalyDetector::SimpleAnomalyDetector() {
+    threshold = 0.9;
 
 }
 
@@ -28,7 +28,7 @@ void SimpleAnomalyDetector::detectCorrelatedFeatures(const TimeSeries& ts, vecto
                                                    std::vector<const vector<float>*> listOfVectors, const int numOfRows){
     for (correlatedindex corrIn : corrIndexes) {
         // if we found correlation that's bigger than the treshold then update cf
-        if (corrIn.corrBIndex != -1 && (corrIn.corrlation >= this->thershold)) {
+        if (corrIn.corrBIndex != -1 && (corrIn.corrlation >= this->threshold)) {
             //correlatedFeatures corrrel;
             //gets te point in order to calculate reg_line
             Point** points = returnPoints(listOfVectors[corrIn.corrAIndex], listOfVectors[corrIn.corrBIndex]);

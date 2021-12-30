@@ -20,6 +20,7 @@ class TimeSeries{
     string timeCol;
 public:
     explicit TimeSeries(const char* CSVfileName);
+    explicit TimeSeries(string CSVfileName);
     int countColumns() const;
     unsigned long countRows()const;
     string getColumnName(vector<float>)const;

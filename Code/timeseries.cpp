@@ -60,6 +60,11 @@ TimeSeries::TimeSeries(const char *CSVfileName) {
     }
 }
 
+// contructor overload
+TimeSeries::TimeSeries(string CSVfileName) : TimeSeries(CSVfileName.c_str()) {
+    
+}
+
 //returns number of columns
 int TimeSeries::countColumns() const {
     return this->columnCount;
