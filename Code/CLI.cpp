@@ -2,7 +2,7 @@
 #include <cassert>
 
 CLI::CLI(DefaultIO* dio) {
-    description = "‫‪Anomaly‬‬ ‫‪Detection‬‬ ‫‪Server‬‬";
+    description = "Anomaly Detection Server";
     this->dio = dio;
     loadCommands();
     //Probably more
@@ -13,7 +13,7 @@ void CLI::start(){
     // option the user will pick
     int opt;
     // write an intro for the the server
-    dio->write("‫‪Welcome‬‬ ‫‪to‬‬ ‫‪the‬‬ " + description + "\n");
+    dio->write("Welcome to the " + description + "\n");
     // prints menu and excute command on a loop
     while (on) {
         opt = menu();
