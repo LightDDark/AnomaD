@@ -81,6 +81,7 @@ public:
 		ofstream file(fileName);
 		while (line.compare("done") != 0) {
 			file << line << endl;
+			line = dio->read();
 		}
     	
     	file.close();
@@ -147,7 +148,21 @@ public:
 	//CsvUpload():Command(new StdIO()){}
 
 	virtual void execute() {
-		dio->write(std::string("‫‪The‬‬ ‫‪current‬‬ ‫‪correlation‬‬ ‫‪threshold‬‬ ‫‪is‬‬ ") + std::to_string(detector->getThreshold()) + "\n");
+		float userIn;
+		bool state = true;
+		do {
+			dio->write("‫‪The‬‬ ‫‪current‬‬ ‫‪correlation‬‬ ‫‪threshold‬‬ ‫‪is‬‬ ");
+			dio->write(detector->getThreshold());
+			dio->write("\n");
+			dio->read(&userIn);
+			if (userIn >= 0 && userIn <= 1) {
+				state = false;
+			}
+			dio->write("‫‪please‬‬ ‫‪choose‬‬ ‫‪a‬‬ ‫‪value‬‬ ‫‪between‬‬ ‫‪0‬‬ ‫‪and‬‬ ‫‪1.‬‬\n");
+			string s = s = dio->read();
+		} while (state);
+		
+		this->detector->setThreshold(userIn);
 	}
 
 };
@@ -156,16 +171,23 @@ public:
 class Detect:public Command {
 	SimpleAnomalyDetector* detector;
 	vector<AnomalyReport>* reports;
+	string testFile;
+	string trainFile;
+
 public:
 	Detect(DefaultIO* dio, SimpleAnomalyDetector* detector, vector<AnomalyReport>* reports):Command(dio) {
 		setDesc("‫‪detect‬‬ ‫‪anomalies‬‬");
 		this->detector = detector;
 		this->reports = reports;
+		this->testFile = "‫‪‫‪anomalyTest.csv";
+		this->trainFile = "‫‪anomalyTrain.csv";
 	}
 	//CsvUpload():Command(new StdIO()){}
 
 	virtual void execute() {
-		
+		this->detector->learnNormal(TimeSeries(trainFile));
+		*reports = this->detector->detect(TimeSeries(testFile));
+		dio->write("anomaly detection complete.\n");
 	}
 
 };
@@ -181,7 +203,11 @@ public:
 	//CsvUpload():Command(new StdIO()){}
 
 	virtual void execute() {
-		
+		for (AnomalyReport report : *reports) {
+			this->dio->write(report.timeStep);
+			this->dio->write("\t" + report.description + "\n");
+		}
+		dio->write("‫‪Done.‬‬\n");
 	}
 
 };
