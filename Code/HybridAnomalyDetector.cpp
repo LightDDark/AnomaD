@@ -2,8 +2,8 @@
 // Created by Maayan Shavit on 18/12/2021.
 //
 #include "HybridAnomalyDetector.h"
-HybridAnomalyDetector::HybridAnomalyDetector() : thresholdHybrid( 0.5 ),thresholdSimple ( 0.9 ) {
-    // TODO Auto-generated constructor stub
+HybridAnomalyDetector::HybridAnomalyDetector() {
+    thresholdHybrid = 0.5;
 
 }
 
@@ -15,7 +15,7 @@ void HybridAnomalyDetector::detectCorrelatedFeatures(const TimeSeries& ts, vecto
                                                      std::vector<const vector<float>*> listOfVectors, const int numOfRows){
     for (correlatedindex corrIn : corrIndexes) {
         // if we found correlation that's bigger than the treshold then update cf
-        if (corrIn.corrBIndex != -1 && (corrIn.corrlation >= this->thresholdSimple)) {
+        if (corrIn.corrBIndex != -1 && (corrIn.corrlation >= this->threshold)) {
             //correlatedFeatures corrrel;
             //gets te point in order to calculate reg_line
             Point** points = returnPoints(listOfVectors[corrIn.corrAIndex], listOfVectors[corrIn.corrBIndex]);
@@ -45,7 +45,7 @@ void HybridAnomalyDetector::updateCorrMEC(Point** points, string feature1, strin
 }
 
 bool HybridAnomalyDetector::checkAnomaly(correlatedFeatures &corF, Point point){
-    if (corF.corrlation >= thresholdSimple){
+    if (corF.corrlation >= threshold){
         return (dev(point, corF.lin_reg) > corF.threshold);
     }
     return !(isWithin(corF.enc_circle, corF.threshold, point));
