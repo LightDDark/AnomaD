@@ -227,11 +227,13 @@ public:
     //CsvUpload():Command(new StdIO()){}
 
     virtual void execute() {
+        //getting user input
         getInput();
+        //grouping anomalies from original dataset
         groupAnomalies();
         // comparing intersection instances between input-shrunk-anomalies and result-shrunk-anomalies
-        int tp = 0;
-        int fp = 0;
+        unsigned long tp = 0;
+        unsigned long fp = 0;
         float start, end;
         for (shrunkAnomaly anomalyIn: inputAnomalies) {
             start = anomalyIn.start_step;
@@ -245,14 +247,14 @@ public:
                 }
             }
         }
-        int P = inputAnomalies.size();
-        int N = 0;
+        unsigned long P = inputAnomalies.size();
+        unsigned long N = 0;
         float tpRate = tp/P;
         float fpRate = fp/N;
         dio->write("True Positive Rate:" + to_string(tpRate) + "\n");
         dio->write("False Positive Rate: " + to_string(fpRate) + "\n");
     }
-    virtual void getInput(){
+    void getInput(){
         shrunkAnomaly input;
         string in;
         dio->write("Please upload your local anomalies file.\n");
@@ -272,7 +274,7 @@ public:
         dio->write("Upload complete\n");
     }
 
-    virtual void groupAnomalies(){
+    void groupAnomalies(){
         //designated comparator for first sort of the reports
         sort(reports->begin(), reports->end(), [](const AnomalyReport &rep1, const AnomalyReport &rep2) {
             return rep1.description < rep2.description;
