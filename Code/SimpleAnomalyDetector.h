@@ -46,6 +46,7 @@ class SimpleAnomalyDetector:public TimeSeriesAnomalyDetector{
     }
 
 public:
+    unsigned long rowCounter;
     SimpleAnomalyDetector();
     virtual ~SimpleAnomalyDetector();
 

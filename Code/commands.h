@@ -27,7 +27,6 @@ public:
 
 
 
-
 // you may edit this class
 class Command{
 	string description;
@@ -211,17 +210,106 @@ public:
 
 // reads known anomalies from user and analyze the results according to it
 class AnalyzeResults:public Command {
-	vector<AnomalyReport>* reports;
-public:
-	AnalyzeResults(DefaultIO* dio, vector<AnomalyReport>* reports):Command(dio) {
-		setDesc("upload anomalies and analyze results");
-		this->reports = reports;
-	}
-	//CsvUpload():Command(new StdIO()){}
+    vector<AnomalyReport> *reports;
+    struct shrunkAnomaly {
+        float start_step;
+        float end_step;
+        string description;
+    };
+    vector<shrunkAnomaly> inputAnomalies;
+    vector<shrunkAnomaly> shrunkAnomalies;
 
-	virtual void execute() {
-		
-	}
+public:
+    AnalyzeResults(DefaultIO *dio, vector<AnomalyReport> *reports) : Command(dio) {
+        setDesc("upload anomalies and analyze results");
+        this->reports = reports;
+    }
+    //CsvUpload():Command(new StdIO()){}
+
+    virtual void execute() {
+        getInput();
+        groupAnomalies();
+        // comparing intersection instances between input-shrunk-anomalies and result-shrunk-anomalies
+        int tp = 0;
+        int fp = 0;
+        float start, end;
+        for (shrunkAnomaly anomalyIn: inputAnomalies) {
+            start = anomalyIn.start_step;
+            end = anomalyIn.end_step;
+            for (shrunkAnomaly anomalyRes: shrunkAnomalies) {
+                if ((start <= anomalyRes.start_step && anomalyRes.start_step <= end) ||
+                    (end >= anomalyRes.end_step && anomalyRes.end_step >= start)) {
+                    tp++;
+                } else {
+                    fp++;
+                }
+            }
+        }
+        int P = inputAnomalies.size();
+        int N = 0;
+        float tpRate = tp/P;
+        float fpRate = fp/N;
+        dio->write("True Positive Rate:" + to_string(tpRate) + "\n");
+        dio->write("False Positive Rate: " + to_string(fpRate) + "\n");
+    }
+    virtual void getInput(){
+        shrunkAnomaly input;
+        string in;
+        dio->write("Please upload your local anomalies file.\n");
+        string line = dio->read();
+        //reading the anomalies from user line by line
+        while (line.compare("done") != 0) {
+            stringstream lineStream(line);
+            getline(lineStream, in, ',');
+            input.start_step = stof(in);
+            getline(lineStream, in, ',');
+            input.end_step = stof(in);
+            input.description = "userInput";
+            //pushing the input line to the final vector
+            inputAnomalies.push_back(input);
+            line = dio->read();
+        }
+        dio->write("Upload complete\n");
+    }
+
+    virtual void groupAnomalies(){
+        //designated comparator for first sort of the reports
+        sort(reports->begin(), reports->end(), [](const AnomalyReport &rep1, const AnomalyReport &rep2) {
+            return rep1.description < rep2.description;
+        });
+        int i, j = 0;
+        shrunkAnomaly grouping;
+        //continue while there are more rows
+        while (i != reports->size()) {
+            j++;
+            //check if j is pointing to a different anomaly description
+            //meaning the code reached the end of a single description block
+            if (reports[i].data()->description != reports[j].data()->description) {
+                //sort all of the anomalies of this description according to their timesteps
+                sort(reports->begin()[i], reports->end()[j - 1],
+                     [](const AnomalyReport &rep1, const AnomalyReport &rep2) {
+                         return rep1.timeStep < rep2.timeStep;
+                     });
+                //save the pointer to the beginning of the current block
+                int first = i;
+                //iterate over all the subsets of the block and group together rows with continuous timesteps
+                for (int m = i; m <= j - 1; m++) {
+                    //if the next timestep is not the consecutive for the current timestep
+                    if (reports[m].data()->timeStep != (reports[m + 1].data()->timeStep - 1)) {
+                        //create a new shrunk anomaly with start and end timestep
+                        grouping.start_step = reports[first].data()->timeStep;
+                        grouping.end_step = reports[m].data()->timeStep;
+                        grouping.description = reports[m].data()->description;
+                        shrunkAnomalies.push_back(grouping);
+                        //continue iterating the rest of the subsets
+                        first = m + 1;
+                    }
+                }
+            }
+            //when finished the current description block, continue over to the next
+            i = j;
+        }
+    }
 };
 
 // finish interaction with user
