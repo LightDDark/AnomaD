@@ -52,17 +52,17 @@ public:
     virtual void learnNormal(const TimeSeries& ts);
     virtual vector<AnomalyReport> detect(const TimeSeries& ts);
 
-    vector<correlatedFeatures> getNormalModel(){
+    virtual vector<correlatedFeatures> getNormalModel(){
         return cf;
     }
     
     // setters
-    void setThreshold(float newThreshold) {
+    virtual void setThreshold(float newThreshold) {
         this->threshold = newThreshold;
     }
 
     // getters
-    float getThreshold() {
+    virtual float getThreshold() {
         return this->threshold;
     }
 
