@@ -297,7 +297,6 @@ public:
         groupAnomalies();
         // comparing intersection instances between input-shrunk-anomalies and result-shrunk-anomalies
         float tp = 0;
-        float fp = 0;
         unsigned long overAlltime = 0;
 		unsigned long P = inputAnomalies.size();
         float start, end;
@@ -307,20 +306,22 @@ public:
             overAlltime += end - start + 1;
             for (shrunkAnomaly anomalyRes: shrunkAnomalies) {
                 if ((end <= anomalyRes.end_step && anomalyRes.start_step <= end) ||
-                    (start >= anomalyRes.start_step && anomalyRes.end_step >= start)) {
+                    (start >= anomalyRes.start_step && anomalyRes.end_step >= start) ||
+					(start <= anomalyRes.start_step && end >= anomalyRes.end_step)) {
                     tp++;
-                } else {
-                    fp++;
                 }
             }
         }
+		float fp = shrunkAnomalies.size() - tp;
 		inputAnomalies.clear();
 		shrunkAnomalies.clear();
         unsigned long N = *(numberOfLines) - overAlltime;
         float tpRate = tp / P;
         float fpRate = fp / N;
-        dio->write("True Positive Rate: " + to_string(tpRate) + "\n");
-        dio->write("False Positive Rate: " + to_string(fpRate) + "\n");
+		tpRate = std::trunc(tpRate * 1000.0) / 1000.0;
+        fpRate = std::trunc(fpRate * 1000.0) / 1000.0;
+        dio->write("True Positive Rate: " + to_string_with_precision(tpRate) + "\n");
+        dio->write("False Positive Rate: " + to_string_with_precision(fpRate) + "\n");
     }
 
     void getInput() {
@@ -368,6 +369,15 @@ public:
         grouping.description = reports[0][i].description;
         shrunkAnomalies.push_back(grouping);
     }
+
+	std::string to_string_with_precision(const float a_value, const int n = 2)
+	{
+		std::ostringstream out;
+		out.precision(n);
+		//out << std::fixed << a_value;
+		out << a_value;
+		return out.str();
+	}
 };
 
 
