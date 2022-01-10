@@ -45,7 +45,7 @@ void SimpleAnomalyDetector::detectCorrelatedFeatures(const TimeSeries& ts, vecto
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts){
     vector<AnomalyReport> report;
     unsigned long colSize = ts.countRows();
-    this->rowCounter = colSize;
+    //this->rowCounter = colSize;
     // goes on every correlation we found in normal mode
     for (correlatedFeatures &corF : cf) {
         string feature1 = corF.feature1;

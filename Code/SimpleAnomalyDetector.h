@@ -46,24 +46,23 @@ class SimpleAnomalyDetector:public TimeSeriesAnomalyDetector{
     }
 
 public:
-    unsigned long rowCounter;
     SimpleAnomalyDetector();
     virtual ~SimpleAnomalyDetector();
 
     virtual void learnNormal(const TimeSeries& ts);
     virtual vector<AnomalyReport> detect(const TimeSeries& ts);
 
-    vector<correlatedFeatures> getNormalModel(){
+    virtual vector<correlatedFeatures> getNormalModel(){
         return cf;
     }
-    
+
     // setters
-    void setThreshold(float newThreshold) {
+    virtual void setThreshold(float newThreshold) {
         this->threshold = newThreshold;
     }
 
     // getters
-    float getThreshold() {
+    virtual float getThreshold() {
         return this->threshold;
     }
 
@@ -76,7 +75,7 @@ protected:
     vector<correlatedindex> findCorrelation(const TimeSeries& ts, std::vector<const vector<float>*>& vectors);
 
     virtual void detectCorrelatedFeatures(const TimeSeries &ts, vector<correlatedindex> corrIndexes,
-                                vector<const vector<float> *> listOfVectors, const int numOfRows);
+                                          vector<const vector<float> *> listOfVectors, const int numOfRows);
 
     virtual bool checkAnomaly(correlatedFeatures &corF, Point point);
 };

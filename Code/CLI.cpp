@@ -2,7 +2,7 @@
 #include <cassert>
 
 CLI::CLI(DefaultIO* dio) {
-    description = "Anomaly Detection Server";
+    description = "Anomaly Detection Server.";
     this->dio = dio;
     loadCommands();
     //Probably more
@@ -12,10 +12,10 @@ void CLI::start(){
     this->on = true;
     // option the user will pick
     int opt;
-    // write an intro for the the server
-    dio->write("Welcome to the " + description + "\n");
     // prints menu and excute command on a loop
     while (on) {
+        // write an intro for the the server
+        dio->write("Welcome to the " + description + "\n");
         opt = menu();
         // excute user choice
         commands[opt]->execute();
@@ -25,8 +25,9 @@ void CLI::start(){
 int CLI::menu() {
     // prints menu
     int i = 1;
+    dio->write("Please choose an option:\n");
     for (Command* c : commands) {
-        dio->write(i + ". " + c->getDesc());
+        dio->write(std::to_string(i) + "." + c->getDesc());
         i++;
     }
     // get user input for option
@@ -38,15 +39,15 @@ int CLI::menu() {
 }
 
 void CLI::loadCommands() {
+    DetectorProxy* detector = new DetectorProxy(new HybridAnomalyDetector());
     // add commands to vector here.
     commands.push_back(new CsvUpload(dio));
-    commands.push_back(new AlgoSett(dio, &this->detector));
-    commands.push_back(new Detect(dio, &this->detector, &this->reports));
-    commands.push_back(new DisplayAnomad(dio, &this->reports));
-    commands.push_back(new AnalyzeResults(dio, &this->reports));
-    commands.push_back(new Exit(dio, &this->on));
+    commands.push_back(new AlgoSett(dio, detector));
+    commands.push_back(new Detect(dio, detector));
+    commands.push_back(new DisplayAnomad(dio, detector->getReports()));
+    commands.push_back(new AnalyzeResults(dio, detector->getReports(), detector->getLines()));
+    commands.push_back(new Exit(dio, &this->on, detector));
 }
 
 CLI::~CLI() {
 }
-
