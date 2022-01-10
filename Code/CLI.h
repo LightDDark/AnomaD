@@ -14,9 +14,6 @@ class CLI {
 	string description;
 	bool on;
 
-	// detector members
-	SimpleAnomalyDetector detector;
-	vector<AnomalyReport> reports;
 	// you can add data members
 
 	// add relevant commands to vector
