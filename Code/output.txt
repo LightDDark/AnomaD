@@ -58,9 +58,9 @@ Please choose an option:
 5.upload anomalies and analyze results
 6.exit
 Please upload your local anomalies file.
-Upload complete
-True Positive Rate:0.000000
-False Positive Rate: 0.000000
+anomaly detection complete.
+True Positive Rate: 0.000000
+False Positive Rate: 0.015873
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -70,9 +70,9 @@ Please choose an option:
 5.upload anomalies and analyze results
 6.exit
 Please upload your local anomalies file.
-Upload complete
-True Positive Rate:0.000000
-False Positive Rate: 0.000000
+anomaly detection complete.
+True Positive Rate: 0.500000
+False Positive Rate: 0.027174
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -82,9 +82,9 @@ Please choose an option:
 5.upload anomalies and analyze results
 6.exit
 Please upload your local anomalies file.
-Upload complete
-True Positive Rate:0.000000
-False Positive Rate: 0.000000
+anomaly detection complete.
+True Positive Rate: 1.000000
+False Positive Rate: 0.010204
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -94,9 +94,9 @@ Please choose an option:
 5.upload anomalies and analyze results
 6.exit
 Please upload your local anomalies file.
-Upload complete
-True Positive Rate:0.000000
-False Positive Rate: 0.000000
+anomaly detection complete.
+True Positive Rate: 1.000000
+False Positive Rate: 0.020942
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -106,9 +106,9 @@ Please choose an option:
 5.upload anomalies and analyze results
 6.exit
 Please upload your local anomalies file.
-Upload complete
-True Positive Rate:1.000000
-False Positive Rate: 0.000000
+anomaly detection complete.
+True Positive Rate: 0.666667
+False Positive Rate: 0.036649
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
