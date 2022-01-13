@@ -23,20 +23,23 @@ Server::Server(int port)throw (const char*) {
 
 void Server::start(ClientHandler& ch)throw(const char*){
     t = new thread([&ch, this](){
-        cout<<"waiting.."<<endl;
-        int addLen = sizeof(client);
-        int newClient = accept(servFD, (sockaddr*)&client, (socklen_t*)&addLen);
-        if (newClient < 0){
-            throw "couldn't accept client";
+        //cout<<"waiting.."<<endl;
+        while(isOn) {
+            int addLen = sizeof(client);
+            int newClient = accept(servFD, (struct sockaddr *) &client, (socklen_t *) &addLen);
+            if (newClient < 0) {
+                throw "couldn't accept client";
+            }
+            ch.handle(newClient);
+            //cout << "done handling" << endl;
+            close(newClient);
         }
-        ch.handle(newClient);
-        cout<<"done handling"<<endl;
-        close(newClient);
         close(servFD);
     });
 }
 
 void Server::stop(){
+    isOn = false;
 	t->join(); // do not delete this!
 }
 

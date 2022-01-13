@@ -5,6 +5,7 @@
 
 #include<iostream>
 #include <string.h>
+#include <sys/socket.h>
 
 #include <fstream>
 #include <vector>
@@ -90,6 +91,36 @@ public:
 	virtual string getDesc() {return description;}
 	virtual void execute()=0;
 	virtual ~Command(){}
+};
+
+class SocketIO : public DefaultIO {
+    int clientID;
+
+public:
+    SocketIO(int clientID) {
+        this->clientID = clientID;
+    }
+
+    virtual string read() {
+        char inp = 0;
+        string input = "";
+        recv(clientID, &inp, sizeof(char), 0);
+        while (inp != '\n') {
+            input += inp;
+            recv(clientID, &inp, sizeof(char), 0);
+        }
+        return input;
+    }
+    virtual void write(string text) {
+        send(clientID, text.c_str(), text.size(), 0);
+    }
+    virtual void write(float f){
+        send(clientID, to_string(f).c_str(), sizeof(f), 0);
+    }
+    virtual void read(float* f){
+            string s = read();
+            *f = stof(s);
+        }
 };
 
 // implement here your command classes
@@ -342,7 +373,7 @@ public:
             inputAnomalies.push_back(input);
             line = dio->read();
         }
-        dio->write("anomaly detection complete.\n");
+        dio->write("Upload complete.\n");
     }
 
     void groupAnomalies() {

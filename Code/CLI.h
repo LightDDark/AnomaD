@@ -22,7 +22,7 @@ class CLI {
 	int menu();
 public:
 	CLI(DefaultIO* dio);
-	void start(int opt);
+	void start();
     int getMenu();
 	virtual ~CLI();
 };

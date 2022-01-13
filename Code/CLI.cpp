@@ -8,14 +8,16 @@ CLI::CLI(DefaultIO* dio) {
     //Probably more
 }
 
-void CLI::start(int opt){
+void CLI::start(){
     this->on = true;
+    int opt;
     // option the user will pick
     // prints menu and excute command on a loop
     while (on) {
+        opt = menu();
+
         commands[opt]->execute();
         // write an intro for the the server
-        opt = menu();
         // excute user choice
     }
 }
