@@ -22,7 +22,8 @@ class CLI {
 	int menu();
 public:
 	CLI(DefaultIO* dio);
-	void start();
+	void start(int opt);
+    int getMenu();
 	virtual ~CLI();
 };
 

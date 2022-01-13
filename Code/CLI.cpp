@@ -8,23 +8,21 @@ CLI::CLI(DefaultIO* dio) {
     //Probably more
 }
 
-void CLI::start(){
+void CLI::start(int opt){
     this->on = true;
     // option the user will pick
-    int opt;
     // prints menu and excute command on a loop
     while (on) {
+        commands[opt]->execute();
         // write an intro for the the server
-        dio->write("Welcome to the " + description + "\n");
         opt = menu();
         // excute user choice
-        commands[opt]->execute();
     }
 }
-
 int CLI::menu() {
     // prints menu
     int i = 1;
+    dio->write("Welcome to the " + description + "\n");
     dio->write("Please choose an option:\n");
     for (Command* c : commands) {
         dio->write(std::to_string(i) + "." + c->getDesc());
@@ -36,6 +34,10 @@ int CLI::menu() {
     // check if valid
     assert(option > 0 && option <= 6 && floorf(option) == option);
     return option - 1;
+}
+
+int CLI::getMenu(){
+    return this->menu();
 }
 
 void CLI::loadCommands() {

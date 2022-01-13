@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include "CLI.h"
+#include <thread>
 
 #ifndef SERVER_H_
 #define SERVER_H_
@@ -38,6 +39,7 @@ class ClientHandler: public DefaultIO{
     }
 
     virtual void read(float* f){
+        recv(clientID,f,sizeof(f),0);
     }
 };
 
@@ -51,12 +53,13 @@ class AnomalyDetectionHandler:public ClientHandler {
 public:
     virtual void handle(int clientID) {
         this->clientID = clientID;
-        const char *greeting = "Hi there, it's me, Server!";
-        char readingSpace[1024];
-        int r = recv(clientID, readingSpace, 1024,0);
-        send(clientID, greeting, sizeof(greeting), 0);
         CLI clientInterface(this);
-        clientInterface.start();
+        int firstOpt = clientInterface.getMenu();
+        char readingSpace[1024];
+        //send(clientID, firstOpt, sizeof(firstOpt), 0);
+        int r = recv(clientID, readingSpace, 1024,0);
+        cout<<readingSpace<<endl;
+        clientInterface.start(firstOpt);
     }
 };
 
@@ -73,7 +76,6 @@ public:
 	Server(int port) throw (const char*);
 	virtual ~Server();
 	void start(ClientHandler& ch)throw(const char*);
-    void startCall(ClientHandler& ch)throw(const char*);
     void stop();
 };
 
