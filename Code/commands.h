@@ -8,6 +8,7 @@
 
 #include <fstream>
 #include <vector>
+#include <cmath>
 #include "HybridAnomalyDetector.h"
 
 using namespace std;
